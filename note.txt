@@ -1,0 +1,844 @@
+const os = require("os");
+const path = require("path");
+
+console.log(os.platform());
+console.log(os.version());
+
+console.log(__dirname);
+console.log(__filename);
+
+console.log(path.basename(__filename));
+console.log(path.extname(__filename));
+
+//---------------ES6
+
+import os from "os";
+import path from "path";
+
+//---------------
+
+import os from "node:os";
+import path from "node:path";
+
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log(os.platform());
+console.log(os.version());
+
+console.log(__dirname);
+console.log(__filename);
+
+console.log(path.basename(__filename));
+console.log(path.extname(__filename));
+
+
+//==============================================
+
+
+const math = (number1, number2, number3, number4) => {
+    let a = number1 + number2 * 2;
+
+    if (number3) {
+        a += number3 - 5;
+    }
+
+    if (number4) {
+        a *= number4;
+    }
+
+    return a;
+};
+
+module.exports = math;
+
+
+const amila = require('./myFunctions');
+
+console.log(amila(2,3));
+
+//---------------ES6
+
+const math = (number1, number2, number3, number4) => {
+    let a = number1 + number2 * 2;
+
+    if (number3) {
+        a += number3 - 5;
+    }
+
+    if (number4) {
+        a *= number4;
+    }
+
+    return a;
+};
+
+export {math};
+
+//---------------
+
+import {math as amila} from "./myFunctions.js";
+
+console.log(amila(2,3));
+
+
+const math = (number1, number2, number3, number4) => {
+  let a = number1 + number2 * 2;
+
+  if (number3) {
+    a += number3 - 5;
+  }
+
+  if (number4) {
+    a *= number4;
+  }
+
+  return a;
+};
+
+const abc = () => {};
+const aaa = () => {};
+const bbb = () => {};
+const ccc = () => {};
+
+const main = {
+  abc,
+  aaa,
+  bbb,
+  ccc,
+};
+
+export default main;
+
+export { abc, aaa, bbb, ccc, math };
+
+
+import {math as amila} from "./myFunctions.js";
+import main from "./myFunctions.js";
+console.log(amila(2,3));
+
+main.aaa;
+
+
+//==============================================
+
+
+import { error } from "node:console";
+import { readFile } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+readFile(join(__dirname,"myName.txt"), "utf-8", (error, data) => {
+    if(error){
+        console.error(error);
+    }else {
+        console.log(data);
+    }
+})
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { dirname} from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+log(__filename);
+log(__dirname);
+
+
+//============================================== Callback
+
+
+import { log } from "node:console";
+import { readFile } from "node:fs";
+import { dirname,join} from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+readFile(join(__dirname, "read.txt"), {
+    encoding:'utf-8'
+}, (err, data)=> {
+    if(!err) {
+        log(data);
+    }
+})
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { writeFile } from "node:fs";
+import { dirname,join} from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+writeFile(
+    join(__dirname, "write.txt"),
+    "Ayesh Chathuranga",
+    {
+        encoding: "utf-8",
+    },
+    (err) => {
+        if(err){
+            log(err);
+        }
+    }
+
+)
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { appendFile } from "node:fs";
+import { dirname,join} from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+appendFile(
+    join(__dirname, "write.js"),
+    `const a = 'Ayesh';
+const c = [1,2,3,4,5];
+
+console.log(a);
+console.log(c[2]);`,
+    {
+        encoding: "utf-8",
+    },
+    (err) => {
+        if(!err){
+            log("Document written");
+        }
+    }
+
+)
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { rm } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+rm(join(__dirname, "write.js"), (err) => !err && log("File is deleted"));
+
+
+//============================================== Promise
+
+
+import { log } from "node:console";
+import { readFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+readFile(join(__dirname, "read.txt"), {
+    encoding: "utf-8",
+}).then((data)=> log(data))
+.catch((err)=>log(err));
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const writeFun = async (data) => {
+  try {
+    await writeFile(join(__dirname, "write.js"), data, {
+      encoding: "utf-8",
+    });
+    log("Document written");
+  } catch (error) {
+    log(error);
+  }
+};
+
+writeFun(`const a = "Ayesh";
+console.log(a);`);
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { appendFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+appendFile(
+  join(__dirname, "write.js"),
+  `
+const c = "Chathura";
+console.log(c);`
+)
+  .then(() => log("Document updated"))
+  .catch((err) => log(err));
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { rm } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+rm(
+  join(__dirname, "write.js"),
+)
+  .then(() => log("Document deleted"))
+  .catch((err) => log(err));
+
+
+//============================================== Sync API
+
+
+import { log } from "node:console";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const data = readFileSync(join(__dirname, "read.txt"), {
+  encoding: "utf-8",
+});
+log(data);
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+writeFileSync(join(__dirname, "write.js"), `
+const c = 'Ayesh'`);
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { appendFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+appendFileSync(join(__dirname, "write.js"), `
+console.log(c);`);
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { rmSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+rmSync(join(__dirname, "write.js"));
+
+
+//==============================================
+
+
+const myFun = (number, yourFunction) => {
+    const c = number * number;
+
+    const d = {
+        amila: () => console.log("ayesh"),
+    };
+
+    yourFunction(c, d);
+}
+
+
+myFun(4, (req, res) => {
+    console.log("num 1 is : ", req);
+    res.amila();
+})
+
+
+//==============================================
+
+//---------- readfile.js
+
+import { log } from "node:console";
+import { readFile } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const fileRead = (path, yourFun = (d) => {}) => {
+    readFile(
+        join(__dirname, `../${path}`),
+        {encoding: "utf-8"},
+        (err, data) => {
+            if (err) {
+                log(err);
+            } else {
+                yourFun(data);
+            }
+        }
+    )
+}
+
+export default fileRead;
+
+//---------- writefile.js
+
+import { log } from "node:console";
+import { writeFile } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const fileWrite = (path, data, yourFun = (d) => {}) => {
+  writeFile(join(__dirname, `../${path}`), data, { encoding: "utf-8" }, (err) => {
+    if (!err) {
+      yourFun("Your file is created");
+    }
+  });
+};
+
+export default fileWrite;
+
+
+//---------- index.js
+
+import fileRead from "./libs/readfile.js";
+import {log} from "node:console";
+import fileWrite from "./libs/writefile.js";
+
+fileRead("read.txt", (data) => {
+    const whatToDo = String(data).split(" ");
+    const command = whatToDo[0];
+    const content = whatToDo.slice(1, whatToDo.length - 1).join(" ");
+    const file = whatToDo[whatToDo.length - 1];
+
+    if (command === "write"){
+        fileWrite(file, content, (d) => log(d));
+    }
+});
+
+
+//==============================================
+
+//---------- index.js
+
+import fileRead from "./libs/readfile.js";
+import { log } from "node:console";
+import fileWrite from "./libs/writefile.js";
+import inquirer from "inquirer";
+import { cardGen } from "./libs/htmlCardGen.js";
+
+const studentInfor = [];
+
+(async () => {
+
+  let allCard = '';
+
+  do {
+    const data = await inquirer.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter Student name",
+      },
+      {
+        type: "number",
+        name: "age",
+        message: "Enter Student age",
+      },
+      {
+        type: "input",
+        name: "city",
+        message: "Enter Student city",
+      },
+      {
+        type: "list",
+        name: "stuClass",
+        message: "Enter Student class",
+        choices: ["class 1","class 2","class 3","class 4"],
+      },
+      {
+        type: "checkbox",
+        name: "subject",
+        message: "Enter Student subject",
+        choices: ["java","javascript","python","golang","dart"],
+      },
+      {
+        type: "confirm",
+        name: "check",
+        message: "Have other values",
+      },
+    ]);
+
+    // log(data);
+    const {check, ...infor} = data;
+    studentInfor.push(infor);
+    if (!check) {
+      break;
+    }
+  } while (true);
+
+  studentInfor.forEach(({name,age,city,stuClass,subject})=>{
+    allCard += cardGen(name,age,city,stuClass,subject)
+  })
+
+  log(allCard);
+
+  let htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Infor</title>
+    <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+    <main>
+        ${allCard}
+    </main>
+</body>
+</html>`;
+
+fileWrite('index.html',htmlContent,(d) => log(d))
+
+})();
+
+//---------- index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Infor</title>
+    <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+    <main>
+        
+<div class="card">
+            <h1 class="name">Ayesh</h1>
+            <div class="infor">
+                <p>age is : 23</p>
+                <p>class is : class 1</p>
+                <p>class is : matara</p>
+            </div>
+            <h3>Subjects</h3>
+            <div class="subjects">
+                <p>java</p><p>javascript</p><p>python</p>
+            </div>
+        </div>
+        
+<div class="card">
+            <h1 class="name">Eshara</h1>
+            <div class="infor">
+                <p>age is : 25</p>
+                <p>class is : class 2</p>
+                <p>class is : Colombo</p>
+            </div>
+            <h3>Subjects</h3>
+            <div class="subjects">
+                <p>java</p><p>javascript</p><p>python</p>
+            </div>
+        </div>
+        
+<div class="card">
+            <h1 class="name">Thisara</h1>
+            <div class="infor">
+                <p>age is : 24</p>
+                <p>class is : class 3</p>
+                <p>class is : galle</p>
+            </div>
+            <h3>Subjects</h3>
+            <div class="subjects">
+                <p>java</p><p>python</p><p>dart</p>
+            </div>
+        </div>
+        
+    </main>
+</body>
+</html>
+
+//---------- index.css
+
+main {
+    width: 100%;
+    padding: 50px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card{
+    width: fit-content;
+    padding: 20px;
+    background-color: gray;
+}
+
+.infor{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.subjects{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.subjects p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    background-color: rgb(72, 72, 72);
+    border-radius: 7px;
+}
+
+//---------- htmlCardGen.js
+
+export const cardGen = (name, age, city, stuClass, subjects = []) => {
+  let sub = "";
+
+  subjects?.forEach((ele) => {
+    sub += `<p>${ele}</p>`;
+  });
+
+  return `
+<div class="card">
+            <h1 class="name">${name}</h1>
+            <div class="infor">
+                <p>age is : ${age}</p>
+                <p>class is : ${stuClass}</p>
+                <p>city is : ${city}</p>
+            </div>
+            <h3>Subjects</h3>
+            <div class="subjects">
+                ${sub}
+            </div>
+        </div>
+        `;
+};
+
+
+//==============================================
+
+
+import { log } from "node:console";
+import { EventEmitter } from "node:events";
+
+class AUKEmitter extends EventEmitter {}
+
+const emitterObj = new AUKEmitter();
+
+emitterObj.on("onClick", (name, city) => {
+  log("onClick event", `Your name is : ${name} ${city.name}`);
+});
+
+emitterObj.on("onClick", (name, city) => {
+    log("onClick event 2", `Your name is : ${name} ${city.name}`);
+});
+  
+emitterObj.once("onClick2", () => {
+    log("onClick event");
+});
+
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+
+
+emitterObj.emit("onClick", 12, {name:"kamal"});
+emitterObj.emit("onClick", 12, {name:"kamal"});
+emitterObj.emit("onClick", 12, {name:"kamal"});
+
+//---------- removeListener
+
+import { log } from "node:console";
+import { EventEmitter } from "node:events";
+
+class AUKEmitter extends EventEmitter {}
+
+const emitterObj = new AUKEmitter();
+
+emitterObj.on("onClick", (name, city) => {
+  log("onClick event", `Your name is : ${name} ${city.name}`);
+});
+
+emitterObj.on("onClick", (name, city) => {
+    log("onClick event 2", `Your name is : ${name} ${city.name}`);
+});
+
+const myFunction = () => {
+  log("onClick event");
+}
+  
+emitterObj.on("onClick2", myFunction);
+
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+emitterObj.removeListener("onClick2", myFunction);
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+
+//---------- removeAllListeners
+
+import { log } from "node:console";
+import { EventEmitter } from "node:events";
+
+class AUKEmitter extends EventEmitter {}
+
+const emitterObj = new AUKEmitter();
+
+emitterObj.on("onClick", (name, city) => {
+  log("onClick event", `Your name is : ${name} ${city.name}`);
+});
+
+emitterObj.on("onClick", (name, city) => {
+    log("onClick event 2", `Your name is : ${name} ${city.name}`);
+});
+
+  
+emitterObj.on("onClick2", () => {
+  log("onClick event");
+});
+
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+emitterObj.removeAllListeners("onClick2", () => {
+  log("onClick event");
+});
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+
+//---------- addListener
+
+
+import { log } from "node:console";
+import { EventEmitter } from "node:events";
+
+class AUKEmitter extends EventEmitter {}
+
+const emitterObj = new AUKEmitter();
+
+emitterObj.on("onClick", (name, city) => {
+  log("onClick event", `Your name is : ${name} ${city.name}`);
+});
+
+emitterObj.on("onClick", (name, city) => {
+    log("onClick event 2", `Your name is : ${name} ${city.name}`);
+});
+
+const myFunction = async (name) => {
+  log("onClick event", name);
+}
+  
+emitterObj.addListener("onClick2", myFunction);
+
+emitterObj.emit("onClick2", "amila");
+emitterObj.emit("onClick2", "upul");
+emitterObj.removeListener("onClick2", myFunction);
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+
+//----------
+
+import { log } from "node:console";
+import { EventEmitter } from "node:events";
+
+class AUKEmitter extends EventEmitter {
+  constructor(city, age){
+    super();
+    this.city = city;
+    this.age = age;
+  }
+
+  runOnClick() {
+    this.emit("onClick", 12, this.city);
+  }
+}
+
+const emitterObj = new AUKEmitter("Matara", 23);
+
+emitterObj.on("onClick", (name, city) => {
+  log("onClick event", `Your name is : ${name} ${city}`);
+});
+
+
+const myFunction = async (name) => {
+  log("onClick event", name);
+}
+  
+emitterObj.addListener("onClick2", myFunction);
+
+emitterObj.emit("onClick2", "amila");
+emitterObj.emit("onClick2", "upul");
+emitterObj.removeListener("onClick2", myFunction);
+emitterObj.emit("onClick2");
+emitterObj.emit("onClick2");
+
+emitterObj.runOnClick();
+
+
+//==============================================
+
+
