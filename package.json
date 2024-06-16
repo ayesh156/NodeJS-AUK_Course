@@ -13,7 +13,9 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
-    "inquirer": "^9.2.23"
+    "inquirer": "^9.2.23",
+    "mysql2": "^3.10.1",
+    "nodemailer": "^6.9.13"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
