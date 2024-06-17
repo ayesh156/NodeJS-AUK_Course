@@ -958,6 +958,7 @@ import "dotenv/config";
   }
 })();
 
+
 //============================================== Event Loop
 
 
@@ -994,3 +995,194 @@ setTimeout(() => {
 }, 0);
 
 console.log("amila 5");
+
+
+//============================================== Buffer
+
+const data = Buffer.from("Amila");
+
+console.log(data.toString());
+
+//---------- 
+
+const data = Buffer.alloc(10);
+
+data.write("Ayesh Chathuranga");
+
+console.log(data);
+
+//============================================== Stream
+
+//---------- ReadStream, WriteStream
+
+import { log } from "node:console";
+import { createReadStream, createWriteStream, readFile } from "node:fs";
+
+const readStream = createReadStream("./text.txt", {highWaterMark: 24});
+const writeStream = createWriteStream("./chathura.txt")
+
+readStream.on("data", (chunk) => {
+  writeStream.write(chunk.toString().toUpperCase());
+});
+
+//---------- pipe
+
+import { log } from "node:console";
+import { createReadStream, createWriteStream, readFile } from "node:fs";
+import { Transform } from "node:stream";
+
+const editString = new Transform({
+    transform(chunk,encoding,callback) {
+        log(chunk.toString());
+        callback(null, chunk.toString().toUpperCase())
+    }
+})
+
+const readStream = createReadStream("./text.txt", {highWaterMark: 24});
+const writeStream = createWriteStream("./chathura.txt")
+
+readStream.pipe(editString).pipe(writeStream);
+
+
+//============================================== Cluster
+
+//---------- readFileSync
+
+import { log } from "node:console";
+import { createServer } from "node:http";
+import { dirname,join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+log(__dirname);
+log(__filename);
+
+const port = process.env.PORT || 3000;
+
+const server = createServer((req, res) => {
+  if(req.url === "/"){
+    res.writeHead(200, "Content-type: text/plain");
+    res.end("Hiii");
+  }else if(req.url === "/data") {
+    res.writeHead(200, "Content-type: text/plain");
+    const data = readFileSync(join(__dirname, "text.txt"));
+    res.end(data);
+  }
+  
+});
+
+server.listen(port, () => log(`server running port ${port}...`));
+
+
+//---------- Cluster
+
+import { log } from "node:console";
+import { createServer } from "node:http";
+import { dirname,join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
+import { cpus } from "node:os";
+import Cluster from "node:cluster";
+import process from "node:process";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+log(__dirname);
+log(__filename);
+
+const port = process.env.PORT || 3000;
+
+// log(cpus());
+// log(cpus().length);
+
+if(Cluster.isPrimary){
+  console.log(`Primary ${process.pid} is running`);
+
+  for (let i = 0; i < cpus().length - 3; i++) {
+    Cluster.fork();
+  }
+
+  Cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else{
+  const server = createServer((req, res) => {
+    if(req.url === "/"){
+      res.writeHead(200, "Content-type: text/plain");
+      res.end("Hiii");
+    }else if(req.url === "/data") {
+      res.writeHead(200, "Content-type: text/plain");
+      const data = readFileSync(join(__dirname, "text.txt"));
+      res.end(data);
+    }
+    
+  });
+  
+  server.listen(port, () => {
+    console.log(`Worker ${process.pid} started`);
+    log(`server running port ${port}...`)});
+}
+
+
+//============================================== Worker Thread
+
+import { log } from "node:console";
+import { createServer } from "node:http";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { isMainThread, Worker } from "node:worker_threads";
+import process from "node:process";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const port = process.env.PORT || 3000;
+
+const fileRead = new Promise((resolve, reject) => {
+  const worker = new Worker(join(__dirname, "./new-thread.js"));
+
+  worker.on("message", (msg)=>{
+    resolve(msg);
+  });
+  worker.on("error", (err)=>{
+    resolve(err);
+  });
+  worker.on("exit", (code) => {
+    if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
+  });
+
+});
+
+const server = createServer((req, res) => {
+  if (req.url === "/") {
+    res.writeHead(200, "Content-type: text/plain");
+    res.end("Hiii");
+  } else if (req.url === "/data") {
+    res.writeHead(200, "Content-type: text/plain");
+    fileRead.then(data=>res.end(data)).catch(err=>res.end(err));
+  }
+});
+
+server.listen(port, () => {
+  console.log(`Worker ${process.pid} started`);
+  log(`server running port ${port}...`);
+});
+
+
+//---------- new-thread.js
+
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { parentPort } from "node:worker_threads";
+import { readFileSync } from "node:fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const data = readFileSync(join(__dirname, "text.txt"));
+
+parentPort.postMessage(data);

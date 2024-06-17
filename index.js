@@ -1,50 +1,13 @@
 import { log } from "node:console";
-import { createConnection } from "mysql2/promise";
-import "dotenv/config";
+import { createServer } from "node:http";
+import { createReadStream, createWriteStream, readFile } from "node:fs";
 
-(async()=>{
-  try {
-    const db = await createConnection({
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      user: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-    });
+const readStream = createReadStream("./HITSOFJUNE2021.mp4");
 
-    const [result] = await db.query("SELECT name FROM `customer`");
-    log(result);
-  } catch (error) {
-    log(error);
-  }
-})();
+const server = createServer((req, res) => {
+  res.writeHead(200, "Content-type: video/mp4");
 
+  readStream.pipe(res);
+});
 
-// import { log } from "node:console";
-// import { createConnection } from "mysql2";
-// import "dotenv/config";
-
-// const db = createConnection({
-//   host: process.env.DB_HOST,
-//   port: process.env.DB_PORT,
-//   user: process.env.DB_USERNAME,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE,
-// });
-
-// db.connect((err) => {
-//   if (err) {
-//     log(err);
-//   } else {
-//     log("db connected");
-//     const sqlQuary =
-//       "UPDATE `office_details` SET name = 'Eshara' WHERE id = 2";
-//     db.query(sqlQuary, (err, result) => {
-//       if (err) {
-//         log(err);
-//       } else {
-//         log(result);
-//       }
-//     });
-//   }
-// });
+server.listen(3000, () => log("server running..."));
